@@ -3,12 +3,16 @@ import { Switch, Route } from 'react-router-dom';
 
 import SplashLoader from './theme/js/components/SplaceLoader';
 
-interface AppRoute {
+export interface AppRoute {
 	name: string;
 	path: string;
 	exact?: boolean;
 	component: React.LazyExoticComponent<React.FC<{}>> | React.FC<{}>;
-	layout: React.LazyExoticComponent<React.FC<{}>> | React.FC<{}>;
+	layout:
+		| React.LazyExoticComponent<
+				React.FC<Omit<AppRoute, 'children' | 'layout' | 'component'>>
+		  >
+		| React.FC<Omit<AppRoute, 'children' | 'layout' | 'component'>>;
 	children?: Array<AppRoute>;
 }
 
@@ -79,7 +83,7 @@ const ConfigRoute: FC<AppRoute> = ({
 	const Layout = layout;
 	return (
 		<Route {...rest}>
-			<Layout>
+			<Layout {...rest}>
 				<Component />
 			</Layout>
 		</Route>

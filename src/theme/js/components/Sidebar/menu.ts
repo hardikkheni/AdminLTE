@@ -15,7 +15,6 @@ export const menu: Array<IMenuItem> = [
 	{
 		name: 'Pages',
 		icon: 'fas fa-book',
-		path: '/',
 		children: [
 			{
 				name: 'Page1',
@@ -47,7 +46,6 @@ export const menu: Array<IMenuItem> = [
 	{
 		name: 'Pages',
 		icon: 'fas fa-book',
-		path: '/',
 		children: [
 			{
 				name: 'Page2',
@@ -64,7 +62,6 @@ export const menu: Array<IMenuItem> = [
 	{
 		name: 'Pages',
 		icon: 'fas fa-book',
-		path: '/',
 		children: [
 			{
 				name: 'Page3',
