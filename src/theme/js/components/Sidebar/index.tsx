@@ -1,9 +1,14 @@
 import { FC } from 'react';
+import { useRouteMatch } from 'react-router';
 
-import { menu } from './menu';
+import { mapRoutes, menu } from './menu';
 import MenuItem from './MenuItem';
 
 const Sidebar: FC = () => {
+	const match = useRouteMatch();
+	const tmpMenu = menu.map((item) => mapRoutes(item, match.path));
+	console.log(tmpMenu);
+
 	return (
 		<aside className="main-sidebar sidebar-dark-primary elevation-4">
 			<a href="/" onClick={(e) => e.preventDefault()} className="brand-link">
@@ -32,8 +37,8 @@ const Sidebar: FC = () => {
 				</div>
 				<nav className="mt-2">
 					<ul className="nav nav-pills nav-sidebar flex-column">
-						{menu.map((item) => (
-							<MenuItem item={item} />
+						{tmpMenu.map(({ item }, i) => (
+							<MenuItem key={i} item={item} />
 						))}
 					</ul>
 				</nav>

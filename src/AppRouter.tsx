@@ -21,6 +21,27 @@ export const routes: Array<AppRoute> = [
 		layout: lazy(() => import('./theme/js/layouts/MainLayout')),
 	},
 	{
+		path: '/page1',
+		name: 'Page1',
+		component: lazy(() => import('./pages/Page1')),
+		exact: true,
+		layout: lazy(() => import('./theme/js/layouts/MainLayout')),
+	},
+	{
+		path: '/page2',
+		name: 'Page2',
+		component: lazy(() => import('./pages/Page2')),
+		exact: true,
+		layout: lazy(() => import('./theme/js/layouts/MainLayout')),
+	},
+	{
+		path: '/page3',
+		name: 'Page3',
+		component: lazy(() => import('./pages/Page3')),
+		exact: true,
+		layout: lazy(() => import('./theme/js/layouts/MainLayout')),
+	},
+	{
 		path: '/login',
 		name: 'Login',
 		exact: true,
