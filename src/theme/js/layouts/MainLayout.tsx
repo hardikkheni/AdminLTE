@@ -14,7 +14,7 @@ const MainLayout: FC<Omit<AppRoute, 'children' | 'layout' | 'component'>> = ({
 	useEffect(() => {
 		dispatch({
 			type: 'theme.classes',
-			payload: ['control-sidebar-slide-open', 'sidebar-mini', 'layout-fixed'],
+			payload: ['sidebar-mini', 'layout-fixed'],
 		});
 	}, [dispatch]);
 

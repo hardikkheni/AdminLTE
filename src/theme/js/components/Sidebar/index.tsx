@@ -7,8 +7,6 @@ import MenuItem from './MenuItem';
 const Sidebar: FC = () => {
 	const match = useRouteMatch();
 	const tmpMenu = menu.map((item) => mapRoutes(item, match.path));
-	console.log(tmpMenu);
-
 	return (
 		<aside className="main-sidebar sidebar-dark-primary elevation-4">
 			<a href="/" onClick={(e) => e.preventDefault()} className="brand-link">
