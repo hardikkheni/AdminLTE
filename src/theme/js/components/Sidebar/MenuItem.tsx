@@ -27,7 +27,7 @@ const MenuItem: FC<{ item: IMenuItem }> = ({ item }) => {
 						history.push(item.path || '/');
 					}
 				}}
-				className={`nav-link ${opend ? 'active' : ''}`}
+				className={`nav-link ${item.opened ? 'active' : ''}`}
 			>
 				<i className={`nav-icon ${item.icon}`}></i>
 				<p>

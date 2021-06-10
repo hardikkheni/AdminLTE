@@ -34,8 +34,9 @@ const MainLayout: FC<Omit<AppRoute, 'children' | 'layout' | 'component'>> = ({
 							<div className="col-sm-6">
 								{meta?.breadcrumb && (
 									<ol className="breadcrumb float-sm-right">
-										{meta.breadcrumb.map(({ name, active, path }) => (
+										{meta.breadcrumb.map(({ name, active, path }, i) => (
 											<li
+												key={i}
 												className={`breadcrumb-item ${
 													!!active ? 'active' : ''
 												}`}
