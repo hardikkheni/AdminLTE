@@ -18,7 +18,7 @@ const MenuItem: FC<{ item: IMenuItem }> = ({ item }) => {
 	return (
 		<li className={`nav-item ${opend ? 'menu-is-opening menu-open' : ''}`}>
 			<span
-				style={{ color: '#c2c7d0' }}
+				style={!opend ? { color: '#c2c7d0' } : {}}
 				onClick={(e) => {
 					if (item.children?.length) {
 						e.preventDefault();
@@ -33,6 +33,7 @@ const MenuItem: FC<{ item: IMenuItem }> = ({ item }) => {
 				<p>
 					{item.name}
 					{item.children?.length && <i className="right fas fa-angle-left"></i>}
+					{item.badge && <item.badge />}
 				</p>
 			</span>
 			{item.children?.length && (

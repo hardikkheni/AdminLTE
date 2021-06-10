@@ -1,8 +1,12 @@
+import React from 'react';
+import { Badge } from 'react-bootstrap';
+
 export interface IMenuItem {
 	name: string;
 	icon: string;
 	path?: string;
 	opened?: boolean;
+	badge?: React.FC<{}>;
 	children?: Array<IMenuItem>;
 }
 
@@ -11,10 +15,20 @@ export const menu: Array<IMenuItem> = [
 		name: 'Home',
 		path: '/',
 		icon: 'fas fa-home',
+		badge: () => (
+			<Badge className="right" variant="danger">
+				New
+			</Badge>
+		),
 	},
 	{
 		name: 'Pages',
 		icon: 'fas fa-book',
+		badge: () => (
+			<Badge className="right" variant="primary">
+				New
+			</Badge>
+		),
 		children: [
 			{
 				name: 'Page1',

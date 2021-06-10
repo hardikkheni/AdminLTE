@@ -14,6 +14,14 @@ export interface AppRoute {
 		  >
 		| React.FC<Omit<AppRoute, 'children' | 'layout' | 'component'>>;
 	children?: Array<AppRoute>;
+	meta?: {
+		title: string;
+		breadcrumb: Array<{
+			name: string;
+			path?: string;
+			active?: boolean;
+		}>;
+	};
 }
 
 export const routes: Array<AppRoute> = [
@@ -23,6 +31,16 @@ export const routes: Array<AppRoute> = [
 		component: lazy(() => import('./pages/Index')),
 		exact: true,
 		layout: lazy(() => import('./theme/js/layouts/MainLayout')),
+		meta: {
+			title: 'Home',
+			breadcrumb: [
+				{
+					name: 'Home',
+					path: '/',
+					active: true,
+				},
+			],
+		},
 	},
 	{
 		path: '/page1',
@@ -30,6 +48,20 @@ export const routes: Array<AppRoute> = [
 		component: lazy(() => import('./pages/Page1')),
 		exact: true,
 		layout: lazy(() => import('./theme/js/layouts/MainLayout')),
+		meta: {
+			title: 'Home',
+			breadcrumb: [
+				{
+					name: 'Home',
+					path: '/',
+				},
+				{
+					name: 'Page1',
+					path: '/page1',
+					active: true,
+				},
+			],
+		},
 	},
 	{
 		path: '/page2',

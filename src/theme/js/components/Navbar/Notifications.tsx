@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Dropdown } from 'react-bootstrap';
+import { Badge, Dropdown } from 'react-bootstrap';
 
 import { IconDropDownRef } from '../../utils/components/DropDownRef';
 
@@ -8,7 +8,10 @@ const Notifications: FC = () => {
 		<Dropdown>
 			<Dropdown.Toggle as={IconDropDownRef}>
 				<i className="far fa-bell"></i>
-				<span className="badge badge-warning navbar-badge">15</span>
+				{/* <span className="badge badge-warning navbar-badge">15</span> */}
+				<Badge className="navbar-badge" variant="warning">
+					15
+				</Badge>
 			</Dropdown.Toggle>
 			<Dropdown.Menu className="dropdown-menu-lg dropdown-menu-right">
 				<Dropdown.Item>

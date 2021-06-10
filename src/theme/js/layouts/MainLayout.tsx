@@ -5,10 +5,12 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import { AppRoute } from '../../../AppRouter';
+import { Link } from 'react-router-dom';
 
 const MainLayout: FC<Omit<AppRoute, 'children' | 'layout' | 'component'>> = ({
 	children,
 	name,
+	meta,
 }) => {
 	const dispatch = useAppDispatch();
 	useEffect(() => {
@@ -30,12 +32,19 @@ const MainLayout: FC<Omit<AppRoute, 'children' | 'layout' | 'component'>> = ({
 								<h1>{name}</h1>
 							</div>
 							<div className="col-sm-6">
-								<ol className="breadcrumb float-sm-right">
-									<li className="breadcrumb-item">
-										<a href="#">Home</a>
-									</li>
-									<li className="breadcrumb-item active">Blank Page</li>
-								</ol>
+								{meta?.breadcrumb && (
+									<ol className="breadcrumb float-sm-right">
+										{meta.breadcrumb.map(({ name, active, path }) => (
+											<li
+												className={`breadcrumb-item ${
+													!!active ? 'active' : ''
+												}`}
+											>
+												{!active ? <Link to={path || '/'}>{name}</Link> : name}
+											</li>
+										))}
+									</ol>
+								)}
 							</div>
 						</div>
 					</div>
