@@ -1,25 +1,10 @@
 import { FC } from 'react';
 import { Card } from 'react-bootstrap';
+import data from '../theme/js/components/DataTable/dummy_data';
 
 import DataTable from '../theme/js/components/DataTable';
 
 const Page1: FC = () => {
-	const data = [
-		{
-			name: 'bulbasouras',
-			super_type: 'fire',
-			sub_types: ['water', 'normal'],
-			hp: 100,
-			types: ['wild', 'unknown'],
-		},
-		{
-			name: 'pokemon',
-			super_type: 'electric',
-			sub_types: ['earth', 'normal'],
-			hp: 100,
-			types: ['wild', 'unknown'],
-		},
-	];
 	return (
 		<Card className="card-primary">
 			<Card.Header>Title</Card.Header>
