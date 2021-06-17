@@ -1,11 +1,29 @@
-import { FC, ReactNode, useMemo, useState } from 'react';
+import {
+	ChangeEvent,
+	FC,
+	ReactNode,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { InputGroup, Pagination, Table } from 'react-bootstrap';
+
+export type DataTableOptions<T = {}> = {
+	page: number;
+	length: number;
+	total: number;
+	data: Array<T>;
+	order: [string, 'ASC' | 'DESC'];
+};
 
 export type DataTableProps<T = {}> = {
 	ssr?: boolean;
 	data?: Array<T>;
 	children?: ReactNode;
 	header?: FC;
+	apiCallBack?: (
+		data: Omit<DataTableOptions<T>, 'data' | 'total'>,
+	) => Promise<DataTableOptions<T>>;
 	row: FC<T & { id: number }>;
 };
 
@@ -15,36 +33,63 @@ const DataTable = <T,>({
 	data,
 	row: Row,
 	header: Header,
+	apiCallBack,
 }: DataTableProps<T>) => {
 	const lengths = [
 		{ label: '10', value: 10 },
 		{ label: '20', value: 20 },
 		{ label: '50', value: 50 },
 	];
-	const [state, setState] = useState<{
-		page: number;
-		length: number;
-		total: number;
-		data: Array<T>;
-		order: [string, 'ASC' | 'DESC'];
-	}>({
+	const [loading, setLoading] = useState(false);
+	const [state, setState] = useState<DataTableOptions<T>>({
 		page: 1,
 		length: 10,
 		total: data?.length || 0,
 		data: data || [],
 		order: ['id', 'ASC'],
 	});
+
+	useEffect(() => {
+		if (!!ssr && apiCallBack) {
+			setLoading(true);
+			apiCallBack({
+				page: state.page,
+				length: state.length,
+				order: state.order,
+			}).then((e) => {
+				setLoading(false);
+				setState(e);
+			});
+		}
+	}, [setState, apiCallBack, ssr, state.page, state.length, state.order]);
+
 	const tableInfo = useMemo(() => {
 		const totalPage = Math.ceil(state.total / state.length);
+
+		const handlePageChange = (page: number) => {
+			if (!!ssr && apiCallBack) {
+				setLoading(true);
+				apiCallBack({
+					page: page,
+					length: state.length,
+					order: state.order,
+				}).then((e) => {
+					setLoading(false);
+					setState(e);
+				});
+			} else {
+				setState({ ...state, page });
+			}
+		};
 
 		const pages = (
 			<>
 				<Pagination.First
-					onClick={() => setState({ ...state, page: 1 })}
+					onClick={() => handlePageChange(1)}
 					disabled={state.page === 1}
 				/>
 				<Pagination.Prev
-					onClick={() => setState({ ...state, page: state.page - 1 })}
+					onClick={() => handlePageChange(state.page - 1)}
 					disabled={state.page === 1}
 				/>
 				<input
@@ -58,16 +103,16 @@ const DataTable = <T,>({
 						if (page > totalPage) {
 							page = totalPage;
 						}
-						setState({ ...state, page });
+						handlePageChange(page);
 					}}
 				/>
 				<Pagination.Item disabled>of {totalPage}</Pagination.Item>
 				<Pagination.Next
-					onClick={() => setState({ ...state, page: state.page + 1 })}
+					onClick={() => handlePageChange(state.page + 1)}
 					disabled={state.page === totalPage}
 				/>
 				<Pagination.Last
-					onClick={() => setState({ ...state, page: totalPage })}
+					onClick={() => handlePageChange(totalPage)}
 					disabled={state.page === totalPage}
 				/>
 			</>
@@ -87,20 +132,37 @@ const DataTable = <T,>({
 						})),
 			pages,
 		};
-	}, [state, ssr]);
+	}, [state, ssr, apiCallBack]);
+
+	const handleLengthChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		const length = parseInt(e.target.value) || 10;
+		if (!!ssr && apiCallBack) {
+			setLoading(true);
+			apiCallBack({
+				page: 1,
+				length: length,
+				order: state.order,
+			}).then((e) => {
+				setLoading(false);
+				setState(e);
+			});
+		} else {
+			setState({ ...state, page: 1, length });
+		}
+	};
+
 	return (
-		<>
+		<div className="overlay-wrapper">
+			{loading && (
+				<div className="overlay">
+					<i className="fas fa-3x fa-sync-alt fa-spin"></i>
+				</div>
+			)}
 			<InputGroup className="mb-3">
 				<InputGroup.Prepend>
 					<InputGroup.Text>Show</InputGroup.Text>
 				</InputGroup.Prepend>
-				<select
-					defaultValue={state.page}
-					onChange={(e) => {
-						const length = parseInt(e.target.value) || 10;
-						setState({ ...state, length });
-					}}
-				>
+				<select defaultValue={state.page} onChange={handleLengthChange}>
 					{lengths.map((item, i) => (
 						<option key={i} value={item.value}>
 							{item.label}
@@ -132,8 +194,8 @@ const DataTable = <T,>({
 					))}
 				</tbody>
 			</Table>
-			<Pagination className="float-right mt-3">{tableInfo.pages}</Pagination>
-		</>
+			<Pagination className="float-right">{tableInfo.pages}</Pagination>
+		</div>
 	);
 };
 

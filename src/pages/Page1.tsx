@@ -9,7 +9,14 @@ const Page1: FC = () => {
 		<Card className="card-primary">
 			<Card.Header>Title</Card.Header>
 			<Card.Body>
-				<DataTable
+				<DataTable<{
+					name: string;
+					supertype: string;
+					subtypes: string[];
+					hp: number;
+					types?: string[];
+				}>
+					// ssr
 					header={() => (
 						<thead>
 							<tr>
@@ -22,17 +29,49 @@ const Page1: FC = () => {
 							</tr>
 						</thead>
 					)}
-					row={({ name, id, sub_types, super_type, types, hp }) => (
+					row={({ name, id, subtypes, supertype, types, hp }) => (
 						<tr>
 							<td>{id}</td>
 							<td>{name}</td>
-							<td>{super_type}</td>
-							<td>{sub_types.join(`, `)}</td>
+							<td>{supertype}</td>
+							<td>{subtypes.join(`, `)}</td>
 							<td>{hp}</td>
-							<td>{types.join(`, `)}</td>
+							<td>{types?.join(`, `)}</td>
 						</tr>
 					)}
 					data={data}
+					// apiCallBack={async ({ page, length, order }) => {
+					// 	const res = await fetch(
+					// 		'https://api.pokemontcg.io/v2/cards?page=' +
+					// 			page +
+					// 			'&pageSize=' +
+					// 			length,
+					// 		{
+					// 			headers: {
+					// 				'X-Api-Key': 'f50ae3c3-c2a9-46dc-8109-17ad4df52254',
+					// 			},
+					// 			method: 'GET',
+					// 		},
+					// 	);
+					// 	const data: {
+					// 		data: Array<{
+					// 			name: string;
+					// 			supertype: string;
+					// 			subtypes: string[];
+					// 			hp: number;
+					// 			types?: string[];
+					// 		}>;
+					// 		totalCount: number;
+					// 	} = await res.json();
+
+					// 	return {
+					// 		data: data.data,
+					// 		page,
+					// 		length,
+					// 		total: data.totalCount,
+					// 		order,
+					// 	};
+					// }}
 				/>
 			</Card.Body>
 			<Card.Footer>Footer</Card.Footer>
