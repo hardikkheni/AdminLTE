@@ -95,6 +95,7 @@ const DataTable = <T,>({
 				<input
 					type="number"
 					value={state.page}
+					style={{ textAlign: 'center', width: 125 }}
 					onChange={(e) => {
 						let page = parseInt(e.target.value) || 0;
 						if (page < 1) {

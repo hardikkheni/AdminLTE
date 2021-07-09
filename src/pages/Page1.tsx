@@ -4,19 +4,21 @@ import data from '../theme/js/components/DataTable/dummy_data';
 
 import DataTable from '../theme/js/components/DataTable';
 
+type Pokemon = {
+	name: string;
+	supertype: string;
+	subtypes: string[];
+	hp: number;
+	types?: string[];
+};
+
 const Page1: FC = () => {
 	return (
 		<Card className="card-primary">
 			<Card.Header>Title</Card.Header>
 			<Card.Body>
-				<DataTable<{
-					name: string;
-					supertype: string;
-					subtypes: string[];
-					hp: number;
-					types?: string[];
-				}>
-					// ssr
+				<DataTable<Pokemon>
+					ssr
 					header={() => (
 						<thead>
 							<tr>
@@ -39,39 +41,33 @@ const Page1: FC = () => {
 							<td>{types?.join(`, `)}</td>
 						</tr>
 					)}
-					data={data}
-					// apiCallBack={async ({ page, length, order }) => {
-					// 	const res = await fetch(
-					// 		'https://api.pokemontcg.io/v2/cards?page=' +
-					// 			page +
-					// 			'&pageSize=' +
-					// 			length,
-					// 		{
-					// 			headers: {
-					// 				'X-Api-Key': 'f50ae3c3-c2a9-46dc-8109-17ad4df52254',
-					// 			},
-					// 			method: 'GET',
-					// 		},
-					// 	);
-					// 	const data: {
-					// 		data: Array<{
-					// 			name: string;
-					// 			supertype: string;
-					// 			subtypes: string[];
-					// 			hp: number;
-					// 			types?: string[];
-					// 		}>;
-					// 		totalCount: number;
-					// 	} = await res.json();
+					// data={data}
+					apiCallBack={async ({ page, length, order }) => {
+						const res = await fetch(
+							'https://api.pokemontcg.io/v2/cards?page=' +
+								page +
+								'&pageSize=' +
+								length,
+							{
+								headers: {
+									'X-Api-Key': 'f50ae3c3-c2a9-46dc-8109-17ad4df52254',
+								},
+								method: 'GET',
+							},
+						);
+						const data: {
+							data: Array<Pokemon>;
+							totalCount: number;
+						} = await res.json();
 
-					// 	return {
-					// 		data: data.data,
-					// 		page,
-					// 		length,
-					// 		total: data.totalCount,
-					// 		order,
-					// 	};
-					// }}
+						return {
+							data: data.data,
+							page,
+							length,
+							total: data.totalCount,
+							order,
+						};
+					}}
 				/>
 			</Card.Body>
 			<Card.Footer>Footer</Card.Footer>
